@@ -320,22 +320,12 @@ test('GetKey OK - other', function (t) {
 test('DeleteKey OK - other', function (t) {
     var url = '/my/keys/' + encodeURIComponent('id_rsa 1');
 
-    OTHER.del(url, function (err, req, res) {
+    OTHER.del(url, function (err) {
         t.ok(err);
-
-        t.deepEqual(err, {
-            body: {
-                code: 'ResourceNotFound',
-                message: 'id_rsa 1 does not exist'
-            },
-            jse_info: {},
-            jse_shortmsg: '',
-            message: 'id_rsa 1 does not exist',
-            name: 'ResourceNotFoundError',
-            restCode: 'ResourceNotFound',
-            statusCode: 404
-        });
-
+        t.equal('ResourceNotFoundError', err.name);
+        t.equal('ResourceNotFound', err.restCode);
+        t.equal(404, err.statusCode);
+        t.equal('id_rsa 1 does not exist', err.message);
         t.end();
     });
 });

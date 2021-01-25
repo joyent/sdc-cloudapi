@@ -403,19 +403,11 @@ test('tag resource collection with role', function (t) {
 test('tag resource collection with non-existent role', function (t) {
     CLIENT.put('/my/users', {
         'role-tag': ['asdasdasdasd']
-    }, function (err, req, res) {
-        t.deepEqual(err, {
-            jse_info: {},
-            jse_shortmsg: '',
-            message: 'Role(s) asdasdasdasd not found',
-            statusCode: 409,
-            restCode: 'InvalidArgument',
-            name: 'InvalidArgumentError',
-            body: {
-                code: 'InvalidArgument',
-                message: 'Role(s) asdasdasdasd not found'
-            }
-        });
+    }, function (err) {
+        t.equal('Role(s) asdasdasdasd not found', err.message);
+        t.equal('InvalidArgumentError', err.name);
+        t.equal('InvalidArgument', err.restCode);
+        t.equal(409, err.statusCode);
         t.end();
     });
 });
@@ -463,19 +455,11 @@ test('tag individual resource with role - other', function (t) {
 test('tag individual resource with non-existent role', function (t) {
     CLIENT.put('/my/users/' + SUB_CLIENT.login, {
         'role-tag': ['asdasdasdasd']
-    }, function (err, req, res) {
-        t.deepEqual(err, {
-            jse_info: {},
-            jse_shortmsg: '',
-            message: 'Role(s) asdasdasdasd not found',
-            statusCode: 409,
-            restCode: 'InvalidArgument',
-            name: 'InvalidArgumentError',
-            body: {
-                code: 'InvalidArgument',
-                message: 'Role(s) asdasdasdasd not found'
-            }
-        });
+    }, function (err) {
+        t.equal('Role(s) asdasdasdasd not found', err.message);
+        t.equal('InvalidArgumentError', err.name);
+        t.equal('InvalidArgument', err.restCode);
+        t.equal(409, err.statusCode);
         t.end();
     });
 });

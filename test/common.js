@@ -72,7 +72,7 @@ var BHYVE_128_FLEX_PACKAGE = Object.assign({}, BHYVE_128_PACKAGE, {
     uuid: '8b3b6796-e5b1-47ce-bb49-ac9dcba7c6eb',
     brand: 'bhyve',
     name: 'sdc_128_flex_bhyve',
-    quota: 50 * 1024, // 50 GiB
+    quota: 20 * 1024, // 50 GiB
     flexible_disk: true
 });
 

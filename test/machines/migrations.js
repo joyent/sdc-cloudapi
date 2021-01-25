@@ -21,6 +21,10 @@ var waitForJob = require('./common').waitForJob;
 
 function checkMigration(t, migration) {
     t.ok(migration, 'migration ok');
+    // Prevent exceptions when migration is not Ok
+    if (!migration) {
+        return;
+    }
     t.ok(migration.machine, 'migration machine ok');
     t.ok(migration.state, 'migration state ok');
     t.ok(migration.phase, 'migration phase ok');
@@ -175,7 +179,7 @@ module.exports = function migrate(suite, client, other, machine, callback) {
                 if (!watcher.done) {
                     if (count > maxSecs) {
                         t.ok(false, 'Timed out waiting for the watcher to end');
-                        t.done();
+                        t.end();
                         return;
                     }
                     setTimeout(waitForWatcherEnd, 5000);
@@ -183,25 +187,30 @@ module.exports = function migrate(suite, client, other, machine, callback) {
                 }
 
                 var events = watcher.events.pop();
-                t.ok(events.length > 0, 'Should have seen events');
-                var endEvent = events.filter(function filterEnd(evt) {
-                    return evt.type === 'end';
-                })[0];
-                t.ok(endEvent, 'Should have seen end event');
-                t.equal(endEvent.phase, action, 'Phase should be ' + action);
-                var progressEvents = events.filter(function filterProgr(evt) {
-                    return evt.type === 'progress';
-                });
-                progressEvents.forEach(function testPrgrEvt(evt) {
-                    t.ok(evt.current_progress, 'Should have current_progress');
-                    t.ok(evt.state, 'Should have event state');
-                    t.ok(evt.total_progress, 'Should have total_progress');
-                    if (evt.started_timestamp) {
-                        t.ok(evt.duration_ms,
+                if (events) {
+                    t.ok(events.length > 0, 'Should have seen events');
+                    var endEvent = events.filter(function filterEnd(evt) {
+                        return evt.type === 'end';
+                    })[0];
+                    t.ok(endEvent, 'Should have seen end event');
+                    t.equal(endEvent.phase, action, 'Phase should be ' +
+                        action);
+                    var progressEvents = events.filter(
+                        function filterProgr(evt) {
+                        return evt.type === 'progress';
+                    });
+                    progressEvents.forEach(function testPrgrEvt(evt) {
+                        t.ok(evt.current_progress,
+                            'Should have current_progress');
+                        t.ok(evt.state, 'Should have event state');
+                        t.ok(evt.total_progress, 'Should have total_progress');
+                        if (evt.started_timestamp) {
+                            t.ok(evt.duration_ms,
                             'Should have duration_ms and started_timestamp');
-                    }
-                });
-                t.done();
+                        }
+                    });
+                }
+                t.end();
             }
 
             waitForWatcherEnd();

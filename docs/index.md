@@ -880,6 +880,10 @@ Note that a `Triton-Datacenter-Name` response header was added in 9.2.0.
 
 The section describes API changes in CloudAPI versions.
 
+## 9.15.0
+
+- Add incremental argument to CreateImageFromMachine [#72](https://github.com/joyent/sdc-cloudapi/pull/72).
+
 ## 9.14.0
 
 - Expose Feed of Machines Changes [#68](https://github.com/joyent/sdc-cloudapi/pull/68).
@@ -3928,6 +3932,7 @@ homepage    | String   | No  | The image [homepage](https://images.joyent.com/do
 eula        | String   | No  | The image [eula](https://images.joyent.com/docs/#manifest-eula)
 acl         | String   | No  | The image [acl](https://images.joyent.com/docs/#manifest-acl)
 tags        | String   | No  | The image [tags](https://images.joyent.com/docs/#manifest-tags)
+incremental | Boolean  | No  | Whether to create an incremental image. Default is true.
 
 ### Returns
 

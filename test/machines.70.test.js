@@ -482,18 +482,14 @@ test('Resize bhyve vm', function (t) {
         return;
     }
 
-    var obj = {
-        package: common.bhyve_128_flex_package.uuid
-    };
-
     // This should succeed on modern versions of CloudAPI, but will fail on
     // older versions when bhyve resize was not supported.
-    CLIENT.post('/my/machines/' + BHYVE_MACHINE_UUID + '?action=resize',
-            obj,
-            function onBhyveResizeCb(err, req, res) {
-        var serverHeader = res && res.headers && res.headers['server'];
-        var supportsBhyveResize = common.cloudapiServerHeaderGtrOrEq(
-            serverHeader, '9.8.3');
+    CLIENT.post('/my/machines/' + BHYVE_MACHINE_UUID + '?action=resize', {
+        package: common.bhyve_128_flex_package.uuid
+    }, function onBhyveResizeCb(err, _req, res) {
+        const serverHeader = res && res.headers && res.headers['server'];
+        const supportsBhyveResize =
+            common.cloudapiServerHeaderGtrOrEq(serverHeader, '9.8.3');
 
         if (supportsBhyveResize) {
             t.ifError(err, 'Resize bhyve instance');
